@@ -2,6 +2,8 @@ package com.qainfotech.tap.training.resourceio;
 
 import com.qainfotech.tap.training.resourceio.exceptions.ObjectNotFoundException;
 import com.qainfotech.tap.training.resourceio.model.Individual;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import static org.assertj.core.api.Assertions.*;
 import org.testng.annotations.BeforeTest;
@@ -36,7 +38,7 @@ public class TeamsYamlReaderTest {
     }
     
     @Test
-    public void getListOfActiveIndividuals_ahould_return_array_list_of_only_active_individual_objects(){
+    public void getListOfActiveIndividuals_ahould_return_array_list_of_only_active_individual_objects() throws FileNotFoundException{
         
         assertThat(teamReader.getListOfActiveIndividuals().size()).isEqualTo(3);
         for(Individual individual:teamReader.getListOfActiveIndividuals()){
@@ -45,7 +47,7 @@ public class TeamsYamlReaderTest {
     }
     
     @Test
-    public void getListOfInactiveIndividuals_should_return_array_list_of_only_inactive_individual_objects(){
+    public void getListOfInactiveIndividuals_should_return_array_list_of_only_inactive_individual_objects() throws FileNotFoundException{
         
         assertThat(teamReader.getListOfInactiveIndividuals().size()).isEqualTo(2);
         for(Individual individual:teamReader.getListOfInactiveIndividuals()){
@@ -56,7 +58,7 @@ public class TeamsYamlReaderTest {
     /* tests for getIndividualById(Integer id) */
     @Test
     public void getIndividualById_should_return_Individual_object_matching_id()
-            throws ObjectNotFoundException{
+            throws ObjectNotFoundException, FileNotFoundException{
         
         assertThat(teamReader.getIndividualById(1202).getName())
                 .isEqualTo("Mark Twain");
@@ -64,7 +66,7 @@ public class TeamsYamlReaderTest {
     
     @Test(expectedExceptions = ObjectNotFoundException.class, expectedExceptionsMessageRegExp="Individual Object with id=100 not found")
     public void getIndividualById_should_throw_ObjectNotFoundException_for_incorrect_id()
-            throws ObjectNotFoundException{
+            throws ObjectNotFoundException, FileNotFoundException{
         
         teamReader.getIndividualById(100);
     }
@@ -72,7 +74,7 @@ public class TeamsYamlReaderTest {
     /* tests for getIndividualByName(String name) */
     @Test
     public void getIndividualByName_should_return_Individual_object_matching_name()
-            throws ObjectNotFoundException{
+            throws ObjectNotFoundException, FileNotFoundException{
         
         assertThat(teamReader.getIndividualByName("Speedy Gonzales").getId())
                 .isEqualTo(1203);
@@ -80,13 +82,13 @@ public class TeamsYamlReaderTest {
     
     @Test(expectedExceptions = ObjectNotFoundException.class, expectedExceptionsMessageRegExp="Individual Object with Name=Individual By This Name Does Not Exist not found")
     public void getIndividualByName_should_throw_ObjectNotFoundException_for_incorrect_name()
-            throws ObjectNotFoundException{
+            throws ObjectNotFoundException, FileNotFoundException{
         
         teamReader.getIndividualByName("Individual By This Name Does Not Exist");
     }
     
     @Test
-    public void getListOfTeams_should_return_a_list_if_Team_object_from_db_json(){
+    public void getListOfTeams_should_return_a_list_if_Team_object_from_db_json() throws FileNotFoundException, ObjectNotFoundException{
         
         assertThat(teamReader.getListOfTeams().size()).isEqualTo(2);
         assertThat(teamReader.getListOfTeams().get(0).getId()).isEqualTo(1001);
@@ -102,7 +104,7 @@ public class TeamsYamlReaderTest {
     }
     
     @Test
-    public void Team_getActiveMembers_should_return_a_list_of_team_members_that_are_active(){
+    public void Team_getActiveMembers_should_return_a_list_of_team_members_that_are_active() throws FileNotFoundException, ObjectNotFoundException{
         assertThat(teamReader.getListOfTeams().get(0).getActiveMembers().size())
                 .isEqualTo(2);
         assertThat(teamReader.getListOfTeams().get(1).getActiveMembers().size())
@@ -110,7 +112,7 @@ public class TeamsYamlReaderTest {
     }
     
     @Test
-    public void Team_getInactiveMembers_should_return_a_list_of_individual_team_members_that_are_inactive(){
+    public void Team_getInactiveMembers_should_return_a_list_of_individual_team_members_that_are_inactive() throws FileNotFoundException, ObjectNotFoundException{
         assertThat(teamReader.getListOfTeams().get(0).getInactiveMembers()
                 .size()).isEqualTo(0);
         
